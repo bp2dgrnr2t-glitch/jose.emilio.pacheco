@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escuela Primaria "Jose Emilio Pacheco"</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header / Nav -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="https://cdn-icons-png.flaticon.com/512/3097/3097155.png" alt="Logo Escuela">
+                <h1>Escuela Primaria "Jose Emilio Pacheco"</h1>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="active">Inicio</a>
+                <a href="#nosotros">Nosotros</a>
+                <a href="#maestros">Docentess</a>
+                <a href="#eventos">Proximas Actividades</a>
+                <a href="login.html" class="btn-login">Acceso privado</a>
+            </nav>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h2>No solo formamos estudiantes, formamos buenos ciudadanos</h2>
+            <p>Educación de calidad con valores, disciplina y amor por el aprendizaje. Más de 20 años formando niños ejemplares.</p>
+            <a href="#nosotros" class="btn-primary">Conócenos</a>
+        </div>
+        <div class="hero-image">
+             <img src="imagenes/docentes.jpg.jpeg" alt="Nuestro equipo docente" class="img-abajo">
+        </div>
+    </section>
+
+    <!-- Nosotros -->
+    <section id="nosotros" class="section nosotros">
+        <div class="container">
+            <h2 class="section-title">Sobre Nuestra Escuela</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🏫</div>
+                    <h3>Misión</h3>
+                    <p>Brindar una educación integral de calidad que forme niños y niñas con valores, conocimientos y habilidades para desenvolverse en la sociedad.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Visión</h3>
+                    <p>Ser una de las principales escuelas primarias de la región, reconocida por su excelencia académica y formación en valores humanos.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⭐</div>
+                    <h3>Valores</h3>
+                    <p>Responsabilidad, respeto, honestidad, solidaridad, tolerancia y compromiso son los pilares de nuestra comunidad educativa.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📚</div>
+                    <h3>Oferta Educativa</h3>
+                    <p>1° a 6° grado de primaria. Turno matutino y vespertino. Programas de refuerzo, arte, deporte y tecnología.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Maestros -->
+    <section id="maestros" class="section maestros">
+        <div class="container">
+            <h2 class="section-title">Nuestros Maestros</h2>
+            <p class="section-subtitle">Profesionales dedicados a la educación de nuestros niños</p>
+            <div class="maestros-grid" id="maestrosGrid"></div>
+        </div>
+    </section>
+
+    <!-- Eventos -->
+    <section id="eventos" class="section eventos">
+        <div class="container">
+            <h2 class="section-title">Próximos Eventos</h2>
+            <div class="eventos-list" id="eventosList"></div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section class="section contacto">
+        <div class="container">
+            <h2 class="section-title">Contacto</h2>
+            <div class="contacto-info">
+                <p>📍 Calle cerro el coleto MZ 39 Lote 1</p>
+                <p>📞 Teléfono: (55) 1234-5678</p>
+                <p>✉️ Email: contacto@escuelajoseemiliopacheco.edu.mx</p>
+                <p>🕐 Horario de atención: Lunes a Viernes 7:00 - 15:00 hrs</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <span id="anioFooter"></span> Escuela Primaria "Jose Emilio Pacheco". Todos los derechos reservados.</p>
+            <p><a href="login.html">Acceso Docentes</a></p>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script>
+        // Renderizar maestros
+        const maestrosGrid = document.getElementById('maestrosGrid');
+        const maestros = obtenerMaestrosActivos();
+        maestrosGrid.innerHTML = maestros.map(m => `
+            <div class="maestro-card">
+                <div class="maestro-avatar">${(m.nombre[0] + m.apellido_paterno[0]).toUpperCase()}</div>
+                <h3>${escaparHTML(nombreCompletoMaestro(m))}</h3>
+                <span class="especialidad">${escaparHTML(m.especialidad)}</span>
+                <p><strong>Email:</strong> ${escaparHTML(m.email)}</p>
+                <p><strong>Tel:</strong> ${escaparHTML(m.telefono)}</p>
+            </div>
+        `).join('');
+
+        // Renderizar eventos
+        const eventosList = document.getElementById('eventosList');
+        eventosList.innerHTML = EVENTOS.map(e => `
+            <div class="evento-card">
+                <div class="evento-fecha">
+                    <span class="mes">${formatearMes(e.fecha)}</span>
+                    <span class="dia">${formatearDia(e.fecha)}</span>
+                </div>
+                <div class="evento-info">
+                    <h3>${escaparHTML(e.titulo)}</h3>
+                    <p>${escaparHTML(e.descripcion)}</p>
+                </div>
+            </div>
+        `).join('');
+
+        // Año actual
+        document.getElementById('anioFooter').textContent = obtenerAnio();
+    </script>
+</body>
+</html>

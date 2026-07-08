@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha del Alumno</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-page">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="https://cdn-icons-png.flaticon.com/512/3097/3097155.png" alt="Logo">
+            <h3>Panel Docentes</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html">👨‍🎓 Alumnos</a>
+            <a href="index.html" target="_blank">🏫 Ver Sitio Web</a>
+        </nav>
+        <div class="sidebar-footer">
+            <p>Hola, <strong id="nombreUsuario">—</strong></p>
+            <a href="#" onclick="cerrarSesion(); return false;" class="btn-logout">Cerrar Sesión</a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="dashboard-header">
+            <h1>Ficha del Alumno</h1>
+            <a href="dashboard.html" class="btn-back">← Volver a la lista</a>
+        </header>
+
+        <!-- Ficha del Alumno -->
+        <section class="ficha-alumno">
+            <div class="ficha-header">
+                <div class="alumno-avatar-large" id="fichaAvatar">—</div>
+                <div class="ficha-titulo">
+                    <h2 id="fichaTitulo">—</h2>
+                    <p class="matricula" id="fichaMatricula">Matrícula: —</p>
+                    <span class="badge" id="fichaEstado">—</span>
+                </div>
+            </div>
+
+            <div class="ficha-grid">
+                <!-- Datos Personales -->
+                <div class="ficha-card">
+                    <h3>📋 Datos Personales</h3>
+                    <div class="ficha-datos">
+                        <div class="dato">
+                            <span class="label">CURP:</span>
+                            <span class="value" id="datoCurp">—</span>
+                        </div>
+                        <div class="dato">
+                            <span class="label">Fecha de Nacimiento:</span>
+                            <span class="value" id="datoNacimiento">—</span>
+                        </div>
+                        <div class="dato">
+                            <span class="label">Edad:</span>
+                            <span class="value" id="datoEdad">—</span>
+                        </div>
+                        <div class="dato">
+                            <span class="label">Sexo:</span>
+                            <span class="value" id="datoSexo">—</span>
+                        </div>
+                        <div class="dato">
+                            <span class="label">Dirección:</span>
+                            <span class="value" id="datoDireccion">—</span>
+                        </div>
+                        <div class="dato">
+                            <span class="label">Teléfono Contacto:</span>
+                            <span class="value" id="datoTelefono">—</span>
+                        </div>
+                        <div class="dato">
+                            <span class="label">Fecha de Registro:</span>
+                            <span class="value" id="datoRegistro">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Datos Escolares -->
+                <div class="ficha-card">
+                    <h3>🏫 Información Escolar</h3>
+                    <div class="ficha-datos">
+                        <div class="dato">
+                            <span class="label">Grado:</span>
+                            <span class="value" id="datoGrado">—</span>
+                        </div>
+                        <div class="dato">
+                            <span class="label">Grupo:</span>
+                            <span class="value" id="datoGrupo">—</span>
+                        </div>
+                        <div class="dato">
+                            <span class="label">Turno:</span>
+                            <span class="value" id="datoTurno">—</span>
+                        </div>
+                        <div class="dato">
+                            <span class="label">Ciclo Escolar:</span>
+                            <span class="value" id="datoCiclo">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Datos del Tutor -->
+                <div class="ficha-card">
+                    <h3>👨‍👩‍👧 Tutor / Responsable</h3>
+                    <div class="ficha-datos">
+                        <div class="dato">
+                            <span class="label">Nombre:</span>
+                            <span class="value" id="datoTutor">—</span>
+                        </div>
+                        <div class="dato">
+                            <span class="label">Parentesco:</span>
+                            <span class="value" id="datoParentesco">—</span>
+                        </div>
+                        <div class="dato">
+                            <span class="label">Teléfono:</span>
+                            <span class="value" id="datoTelTutor">—</span>
+                        </div>
+                        <div class="dato">
+                            <span class="label">Email:</span>
+                            <span class="value" id="datoEmailTutor">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calificaciones -->
+                <div class="ficha-card full-width">
+                    <h3>📊 Calificaciones por Materia</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Materia</th>
+                                    <th>Clave</th>
+                                    <th>Promedio</th>
+                                    <th>Faltas</th>
+                                    <th>Desempeño</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaCalificaciones"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acciones -->
+            <div class="ficha-actions">
+                <button class="btn-baja-action" id="btnBaja">🚫 Dar de Baja</button>
+                <button class="btn-delete-action" id="btnEliminar">🗑️ Eliminar Alumno</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Confirmar acción</h3>
+            <p id="modalMessage">¿Estás seguro?</p>
+            <div class="modal-actions">
+                <button id="modalConfirm" class="btn-danger" onclick="ejecutarAccion()">Confirmar</button>
+                <button id="modalCancel" class="btn-secondary" onclick="cerrarModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        protegerRuta();
+        actualizarSidebarUsuario();
+        cargarFichaAlumno();
+    </script>
+</body>
+</html>

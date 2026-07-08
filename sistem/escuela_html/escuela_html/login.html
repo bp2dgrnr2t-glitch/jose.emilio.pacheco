@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Docentes - Escuela Primaria</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f5e70 0%, #38b2ac 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+        .login-card h2 {
+            color: #0f2b48;
+            margin: 15px 0 8px;
+            font-size: 28px;
+        }
+        .login-card p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background-color: #0f5e70;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 17px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-login:hover {
+            background-color: #0c4b5a;
+        }
+        .volver {
+            display: inline-block;
+            margin-top: 20px;
+            color: #0f5e70;
+            text-decoration: none;
+        }
+        .mensaje-error {
+            color: #dc3545;
+            margin: 12px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <span style="font-size: 40px;">🚗</span>
+    <h2>Acceso Docentes</h2>
+    <p>Panel de administración escolar</p>
+
+    <div id="mensajeError" class="mensaje-error">Usuario o contraseña incorrectos</div>
+
+    <form id="formLogin">
+        <div class="form-group">
+            <label for="usuario">Usuario</label>
+            <input type="text" id="usuario" placeholder="Ej: roberto.s" required>
+        </div>
+
+        <div class="form-group">
+            <label for="contrasena">Contraseña</label>
+            <input type="password" id="contrasena" placeholder="Tu contraseña" required>
+        </div>
+
+        <button type="submit" class="btn-login">Iniciar Sesión</button>
+    </form>
+
+    <a href="index.html" class="volver">← Volver al inicio</a>
+</div>
+
+<script>
+    // Aquí defines tus usuarios y contraseñas (puedes agregar más)
+    const usuariosValidos = [
+        { usuario: "roberto.s", contrasena: "123456" },
+        { usuario: "maria.e", contrasena: "docente2026" },
+        { usuario: "admin", contrasena: "admin123" }
+    ];
+
+    const form = document.getElementById("formLogin");
+    const mensajeError = document.getElementById("mensajeError");
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const usuarioIngresado = document.getElementById("usuario").value.trim();
+        const contrasenaIngresada = document.getElementById("contrasena").value.trim();
+
+        // Verificamos si coincide con alguno de los usuarios válidos
+        const accesoCorrecto = usuariosValidos.some(credencial => 
+            credencial.usuario === usuarioIngresado && credencial.contrasena === contrasenaIngresada
+        );
+
+        if (accesoCorrecto) {
+            // Si es correcto, redirige al panel de gestión
+            window.location.href = "dashboard.html";
+        } else {
+            // Si es incorrecto, muestra mensaje de error
+            mensajeError.style.display = "block";
+        }
+    });
+</script>
+
+</body>
+</html>

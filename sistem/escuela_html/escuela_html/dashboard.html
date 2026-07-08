@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Escolar</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #f0f4f8; color: #333; padding: 20px; }
+
+        .encabezado { background: #1e3a5f; color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .encabezado h1 { font-size: 22px; margin-bottom: 5px; }
+        .encabezado p { font-size: 14px; opacity: 0.9; }
+
+        .contenedor { max-width: 1100px; margin: 0 auto; }
+
+        .fila { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-bottom: 20px; }
+        @media (max-width: 768px) { .fila { grid-template-columns: 1fr; } }
+
+        .tarjeta { background: white; padding: 18px; border-radius: 8px; box-shadow: 0 1px 3px #0002; margin-bottom: 18px; }
+        .tarjeta h2 { font-size: 18px; color: #1e3a5f; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+
+        .campo { margin-bottom: 12px; }
+        .campo label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: 500; }
+        .campo input, .campo select { width: 100%; padding: 9px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+
+        .boton { padding: 9px 16px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 14px; }
+        .boton-azul { background: #1e3a5f; color: white; }
+        .boton-verde { background: #2e7d32; color: white; }
+        .boton-rojo { background: #c62828; color: white; }
+        .boton-chico { padding: 5px 10px; font-size: 12px; }
+
+        .lista-docentes { max-height: 320px; overflow-y: auto; }
+        .item-docente { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-radius: 5px; margin-bottom: 8px; border: 1px solid transparent; }
+        .item-docente:hover { background: #f8fafc; }
+        .item-docente.seleccionado { background: #e3f2fd; border-color: #1e3a5f; }
+        .info-docente { display: flex; gap: 10px; align-items: center; }
+        .iniciales { width: 32px; height: 32px; background: #1e3a5f; color: white; border-radius: 50%; display: grid; place-items: center; font-weight: bold; font-size: 13px; }
+        .nombre-docente { font-weight: 600; font-size: 15px; }
+        .grado-docente { font-size: 13px; color: #777; margin-top: 2px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+        th { background: #f7f9fc; }
+        .etiqueta { padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+        .etiqueta-alta { background: #e8f5e9; color: #2e7d32; }
+        .etiqueta-baja { background: #ffebee; color: #c62828; }
+
+        .vacio { text-align: center; padding: 40px; color: #999; font-size: 15px; }
+    </style>
+</head>
+<body>
+    <div class="encabezado">
+        <h1>Primaria José Emilio Pacheco</h1>
+        <p>Sistema de Registro</p>
+    </div>
+
+    <div class="contenedor">
+        <div class="fila">
+            <div>
+                <div class="tarjeta">
+                    <h2>Registrar Docente</h2>
+                    <div class="campo">
+                        <label>Nombre completo</label>
+                        <input type="text" id="nombreDocente" placeholder="Ej: María López">
+                    </div>
+                    <div class="campo">
+                        <label>Grado</label>
+                        <select id="gradoDocente">
+                            <option value="">Seleccionar</option>
+                            <option>1° A</option>
+                            <option>1° B</option>
+                            <option>2° A</option>
+                            <option>2° B</option>
+                            <option>3° A</option>
+                            <option>3° B</option>
+                            <option>4° A</option>
+                            <option>4° B</option>
+                            <option>5° A</option>
+                            <option>5° B</option>
+                            <option>5° C</option>
+                            <option>6° A</option>
+                            <option>6° B</option>
+                        </select>
+                    </div>
+                    <button class="boton boton-azul" onclick="agregarDocente()">Agregar</button>
+                </div>
+
+                <div class="tarjeta">
+                    <h2>Lista de Docentes</h2>
+                    <div class="lista-docentes" id="listaDocentes">
+                        <div class="vacio">📝 No hay docentes registrados</div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="tarjeta" id="panelAlumno" style="display: none;">
+                    <h2>Registrar Alumno</h2>
+                    <div class="campo">
+                        <label>Docente seleccionado</label>
+                        <input type="text" id="docenteActivo" readonly style="background: #f8fafc;">
+                    </div>
+                    <div class="campo">
+                        <label>Nombre del alumno</label>
+                        <input type="text" id="nombreAlumno" placeholder="Ej: Juan Pérez">
+                    </div>
+                    <div class="campo">
+                        <label>Matrícula</label>
+                        <input type="text" id="matriculaAlumno" placeholder="Ej: 2026001">
+                    </div>
+                    <div class="campo">
+                        <label>Estado</label>
+                        <select id="estadoAlumno">
+                            <option value="alta">En Alta</option>
+                            <option value="baja">De Baja</option>
+                        </select>
+                    </div>
+                    <button class="boton boton-verde" onclick="agregarAlumno()">Agregar Alumno</button>
+                </div>
+
+                <div class="tarjeta">
+                    <h2>Alumnos <span id="tituloDocente" style="color: #888; font-size: 15px;"></span></h2>
+                    <div id="contenedorAlumnos">
+                        <div class="vacio">👨‍🏫 Selecciona un docente para ver sus alumnos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos totalmente nuevos, sin referencias a lo anterior
+        let docentes = [];
+        let alumnos = [];
+        let idSeleccionado = null;
+
+        function generarId() {
+            return Date.now().toString(36) + Math.random().toString(36).substring(2);
+        }
+
+        function guardar() {
+            try {
+                localStorage.setItem('escuela_docentes', JSON.stringify(docentes));
+                localStorage.setItem('escuela_alumnos', JSON.stringify(alumnos));
+                localStorage.setItem('escuela_activo', idSeleccionado);
+            } catch (e) {
+                console.log("Guardado limpio");
+            }
+        }
+
+        function cargar() {
+            try {
+                const d = localStorage.getItem('escuela_docentes');
+                const a = localStorage.getItem('escuela_alumnos');
+                const sel = localStorage.getItem('escuela_activo');
+                docentes = d ? JSON.parse(d) : [];
+                alumnos = a ? JSON.parse(a) : [];
+                idSeleccionado = sel || null;
+            } catch {
+                localStorage.clear();
+                docentes = [];
+                alumnos = [];
+                idSeleccionado = null;
+            }
+        }
+
+        function mostrarDocentes() {
+            const cont = document.getElementById('listaDocentes');
+            if (docentes.length === 0) {
+                cont.innerHTML = `<div class="vacio">📝 No hay docentes registrados</div>`;
+                return;
+            }
+            cont.innerHTML = docentes.map(d => {
+                const total = alumnos.filter(x => x.idDocente === d.id).length;
+                const iniciales = d.nombre.split(' ').map(p => p[0]).join('').slice(0,2).toUpperCase();
+                const clase = idSeleccionado === d.id ? 'seleccionado' : '';
+                return `
+                    <div class="item-docente ${clase}" onclick="seleccionar('${d.id}')">
+                        <div class="info-docente">
+                            <div class="iniciales">${iniciales}</div>
+                            <div>
+                                <div class="nombre-docente">${d.nombre}</div>
+                                <div class="grado-docente">${d.grado} • ${total} alumno${total !== 1 ? 's' : ''}</div>
+                            </div>
+                        </div>
+                        <button class="boton boton-rojo boton-chico" onclick="event.stopPropagation(); borrarDocente('${d.id}')">✕</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function seleccionar(id) {
+            idSeleccionado = id;
+            const d = docentes.find(x => x.id === id);
+            document.getElementById('docenteActivo').value = d.nombre;
+            document.getElementById('tituloDocente').textContent = ` - ${d.nombre}`;
+            document.getElementById('panelAlumno').style.display = 'block';
+            mostrarDocentes();
+            mostrarAlumnos();
+            guardar();
+        }
+
+        function mostrarAlumnos() {
+            const cont = document.getElementById('contenedorAlumnos');
+            if (!idSeleccionado) {
+                cont.innerHTML = `<div class="vacio">👨‍🏫 Selecciona un docente</div>`;
+                return;
+            }
+            const lista = alumnos.filter(x => x.idDocente === idSeleccionado);
+            if (lista.length === 0) {
+                cont.innerHTML = `<div class="vacio">📚 Este docente no tiene alumnos</div>`;
+                return;
+            }
+            cont.innerHTML = `
+                <table>
+                    <thead><tr><th>Matrícula</th><th>Nombre</th><th>Estado</th><th>Acciones</th></tr></thead>
+                    <tbody>
+                        ${lista.map(a => `
+                            <tr>
+                                <td>${a.matricula}</td>
+                                <td>${a.nombre}</td>
+                                <td><span class="etiqueta ${a.estado === 'alta' ? 'etiqueta-alta' : 'etiqueta-baja'}">${a.estado === 'alta' ? 'Alta' : 'Baja'}</span></td>
+                                <td>
+                                    <button class="boton boton-chico ${a.estado === 'alta' ? 'boton-rojo' : 'boton-verde'}" onclick="cambiarEstado('${a.id}')">
+                                        ${a.estado === 'alta' ? 'Dar baja' : 'Activar'}
+                                    </button>
+                                    <button class="boton boton-rojo boton-chico" onclick="borrarAlumno('${a.id}')">Eliminar</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function agregarDocente() {
+            const nom = document.getElementById('nombreDocente').value.trim();
+            const grad = document.getElementById('gradoDocente').value;
+            if (!nom || !grad) return alert('Completa nombre y grado');
+            docentes.push({ id: generarId(), nombre: nom, grado: grad });
+            document.getElementById('nombreDocente').value = '';
+            document.getElementById('gradoDocente').value = '';
+            actualizarTodo();
+        }
+
+        function borrarDocente(id) {
+            if (!confirm('¿Eliminar docente y sus alumnos?')) return;
+            docentes = docentes.filter(x => x.id !== id);
+            alumnos = alumnos.filter(x => x.idDocente !== id);
+            if (idSeleccionado === id) {
+                idSeleccionado = docentes[0]?.id || null;
+                document.getElementById('panelAlumno').style.display = idSeleccionado ? 'block' : 'none';
+            }
+            actualizarTodo();
+        }
+
+        function agregarAlumno() {
+            if (!idSeleccionado) return alert('Selecciona primero un docente');
+            const nom = document.getElementById('nombreAlumno').value.trim();
+            const mat = document.getElementById('matriculaAlumno').value.trim();
+            const est = document.getElementById('estadoAlumno').value;
+            if (!nom || !mat) return alert('Completa nombre y matrícula');
+            alumnos.push({ id: generarId(), nombre: nom, matricula: mat, estado: est, idDocente: idSeleccionado });
+            document.getElementById('nombreAlumno').value = '';
+            document.getElementById('matriculaAlumno').value = '';
+            actualizarTodo();
+        }
+
+        function cambiarEstado(id) {
+            const al = alumnos.find(x => x.id === id);
+            if (al) al.estado = al.estado === 'alta' ? 'baja' : 'alta';
+            actualizarTodo();
+        }
+
+        function borrarAlumno(id) {
+            if (!confirm('¿Eliminar alumno?')) return;
+            alumnos = alumnos.filter(x => x.id !== id);
+            actualizarTodo();
+        }
+
+        function actualizarTodo() {
+            mostrarDocentes();
+            mostrarAlumnos();
+            guardar();
+        }
+
+        window.onload = () => {
+            cargar();
+            actualizarTodo();
+        };
+    </script>
+</body>
+</html>
